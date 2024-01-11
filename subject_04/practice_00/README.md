@@ -1,13 +1,14 @@
 # 과제 04: 제어문
 
 - [과제 04: 제어문](#과제-04-제어문)
-    - [실습 00: JUnit 5 학습하세요.](#실습-00-junit-5-학습하세요)
-        - [build.gradle](#buildgradle)
-        - [Maven Repository](#maven-repository)
-        - [JUnit 5 소개](#junit-5-소개)
-        - [IntelliJ에서 JUnit 5 사용하기](#intellij에서-junit-5-사용하기)
-            - [테스트 클래스 생성하기](#테스트-클래스-생성하기)
-        - [JUnit 5 어노테이션](#junit-5-어노테이션)
+  - [실습 00: JUnit 5 학습하세요.](#실습-00-junit-5-학습하세요)
+    - [build.gradle](#buildgradle)
+    - [Maven Repository](#maven-repository)
+    - [JUnit 5 소개](#junit-5-소개)
+    - [IntelliJ에서 JUnit 5 사용하기](#intellij에서-junit-5-사용하기)
+      - [테스트 클래스 생성하기](#테스트-클래스-생성하기)
+    - [JUnit 5 어노테이션](#junit-5-어노테이션)
+    - [JUnit 5](#junit-5)
 
 ## 실습 00: JUnit 5 학습하세요.
 
@@ -98,7 +99,7 @@ class JunitStudyTest {
 }
 ```
 
-### JUnit 5 어노테이션
+### Annotations
 
 | 어노테이션          | 설명                              |
 |----------------|---------------------------------|
@@ -116,3 +117,23 @@ class JunitStudyTest {
 
 > `@Disabled`는 테스트를 비활성화되어 실행되지 않는다.
 > 비활성화를 하면 테스트를 잊어버리지 않기 위해 주석처리를 하지 않아도 된다는 장점이 있다.
+
+### Assertions
+
+| 함수                                       | 설명                              |
+|------------------------------------------|---------------------------------|
+| `assertEquals(expected, actual)`         | 두 값이 같은지 확인한다. |
+| `assertNotEquals(unexpected, actual)`    | 두 값이 다른지 확인한다. |
+| `assertNull(actual)`                     | 값이 `null`인지 확인한다. |
+| `assertNotNull(actual)`                  | 값이 `null`이 아닌지 확인한다. |
+| `assertTrue(boolean)`                    | 조건이 `true`인지 확인한다. |
+| `assertFalse(boolean)`                   | 조건이 `false`인지 확인한다. |
+| `assertThrows(expectedType, executable)` | 예외가 발생하는지 확인한다. |
+| `assertDoesNotThrow(executable)`         | 예외가 발생하지 않는지 확인한다. |
+
+`Assertions`를 사용하는 이유
+
+- 테스트를 자동화하여 반복적으로 수행할 수 있기 때문에 코드를 수정할 때마다 테스트를 수행하여 기존의 기능이 올바르게 동작하는지 확인할 수 있으며,
+- 테스트가 실패한 경우 실패한 지점을 빠르게 식별할 수 있고,
+- 코드의 동작을 설명하는 일종의 문서화 역할을 하여 다른 사람이 코드를 더 쉽게 이해할 수 있다.
+
