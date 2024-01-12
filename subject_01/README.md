@@ -1,5 +1,5 @@
 # JVM이란 무엇인가   
-[JVM 정리](/Users/jiwojung/goinfre/java/Java/JVM.md)   
+[JVM 정리](https://github.com/spring-for-hitchhiker/java-study/blob/issue-%231/subject_01/JVM.md)
 
 # 컴파일 하는 방법   
 - javac : bytecode로 컴파일, 컴파일된 파일은 '.class' 파일로 저장   
@@ -16,7 +16,7 @@ Eclipse, Entellij 와 같은 툴을 이용한다
 실시간으로 동작하여 최적화를 진행한다
 
 # JVM 구성 요소   
-[JVM 정리](/Users/jiwojung/goinfre/java/Java/JVM.md)  
+[JVM 정리](https://github.com/spring-for-hitchhiker/java-study/blob/issue-%231/subject_01/JVM.md)
 
 # JDK와 JRE의 차이   
 Java Runtime Environment 의 약자로 자바를 실행시키기 위한 모음집
