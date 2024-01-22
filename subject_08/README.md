@@ -143,6 +143,61 @@ public interface MyExtendedInterface extends MyInterface, AnotherInterface, Addi
 
 ## 인터페이스의 기본 메소드 (Default Method), 자바 8
 
+인터페이스는 `추상 메소드`와 `상수`만을 가질 수 있다.
+하지만 자바 8에서는 하위 호환성을 위해 `default 메소드`를 추가할 수 있게 되었다.
+
+`default` 메소드는 인터페이스에 선언되지만, 구현부를 갖는 인스턴스 메소드이다.
+구현 클래스에서 해당 메서드를 정의하지 않아도 사용할 수 있으며, 재정의할 수도 있다.
+
+공개된 라이브러리를 사용 중이라고 가정해보자.
+해당 라이브러리의 인터페이스에 메서드가 추가된다면 해당 인터페이스를 사용하는 모든 코드를 수정해야 한다.  
+하지만 `default` 메소드를 사용하면 해당 메소드를 구현하지 않아도 되기 때문에 하위 호환성을 유지할 수 있다.
+
 ## 인터페이스의 static 메소드, 자바 8
 
+자바 8에서는 `defualt` 메서드와 별개로 `static` 메소드를 인터페이스에 추가할 수 있게 되었다.
+
+`static` 메소드는 `default` 메서드와 마찬가지로 인터페이스에 선언되지만, 구현부를 갖는 클래스 메소드이다.
+
+`static` 메서드는 인스턴스와 관계없는 독립적인 메서드이므로 인터페이스를 구현한 클래스에서 재정의할 수 없다.
+
+`static` 메서드는 인터페이스를 구현한 클래스에서 직접 호출할 수 있으며,
+인터페이스를 구현하지 않은 클래스에서도 인터페이스명을 통해 호출할 수 있다.
+
+또한 `static` 메서드도 항상 `public`이며 생략할 수 있다. 
+
+## 함수형 인터페이스, 자바 8
+
+자바 8에서는 `함수형 프로그래밍`에서 람다 표현식을 지원하기 위해 함수형 인터페이스를 제공한다.
+
+함수형 인터페이스(Functional Interface)는 `단 하나의 추상 메소드`만을 가지는 인터페이스이며,  
+`@FunctionalInterface` 어노테이션을 통해 함수형 인터페이스임을 명시할 수 있다.
+
+함수형 인터페이스를 사용하면 함수를 `1급 시민`처럼 다룰 수 있다.  
+1급 시민 되면 변수에 `값으로 할당`하거나, `매개변수` 혹은 함수의 `반환값`으로 사용할 수 있다.
+
+```java
+// 함수형 인터페이스 선언
+@FunctionalInterface
+interface MyFunctionalInterface {
+    void myMethod();
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // 람다 표현식을 사용하여 함수형 인터페이스의 인스턴스 생성
+        MyFunctionalInterface myFunc = () -> System.out.println("Hello, functional interface!");
+
+        // 함수형 인터페이스의 메서드 호출
+        myFunc.myMethod();
+    }
+}
+```
+
 ## 인터페이스의 private 메소드, 자바 9
+
+`private` 메서드는 해당 인터페이스 내에서만 사용되는 메서드이다.
+
+주로 `default` 메서드에서만 사용되는 함수를 `private` 메서드로 분리하여 내부에서만 사용할 수 있도록 한다.
+
+`static` 메서드도 `private`을 사용하여 정의할 수 있다.
