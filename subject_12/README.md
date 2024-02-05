@@ -144,16 +144,41 @@ public @interface MyAnnotation {
 `@Documented` 어노테이션은 `java.lang.annotation` 패키지에 정의되어 있다.
 
 ```java
+public @interface MyAnnotation {
+    String value();
+    int pivot() default 20;
+}
+
+/**
+  * MyClass 클래스에 대한 설명
+  * ...
+  */
+@MyAnnotation(value="hello", pivot=30)  // javadoc에 포함되지 않는다.
+public class MyClass {
+    ...
+}
+```
+
+```java
 @Documented
 public @interface MyAnnotation {
     String value();
     int pivot() default 20;
 }
+
+/**
+  * MyClass 클래스에 대한 설명
+  * ...
+  */
+@MyAnnotation(value="hello", pivot=30)  // javadoc에 포함된다.
+public class MyClass {
+    ...
+}
 ```
 
-[//]: # (todo : javadoc이란 무엇인가)
-javadoc이란 자바 소스 코드에 대한 문서를 생성하는 도구이다.
-javadoc은 소스 코드에 작성된 주석을 읽어들여 문서를 생성한다.
+javadoc이란 주석을 사용해서 자바 소스 코드에 대한 문서를 생성하는 도구이다.
+`@Override`, `@Deprecated` 등의 자바에서 기본적으로 제공하는 어노테이션을 제외하고,
+기본적으로 어노테이션은 javadoc으로 작성된 문서에 포함되지 않는다.
 `@Documented` 어노테이션을 사용하면 어노테이션 정보가 javadoc으로 작성된 문서에 포함되도록 한다.
 
 ### 애노테이션 프로세서
