@@ -183,24 +183,22 @@ javadoc이란 주석을 사용해서 자바 소스 코드에 대한 문서를 �
 
 ### 애노테이션 프로세서
 
-[//]: # (todo : 어노테이션 프로세서란 무엇인가)
-
-애노테이션 프로세서는 컴파일 시점에 애노테이션을 처리하는 프로그램이다.
+`애노테이션 프로세서`는 **컴파일 시점**에 애노테이션을 처리하는 프로그램이다.  
 애노테이션 프로세서는 `javax.annotation.processing` 패키지에 정의되어 있다.
 
-애노테이션 프로세서를 만들기 위해서는 `AbstractProcessor` 클래스를 상속받아야 한다.
+어노테이션 프로세서는 리플렉션과 다르게 런타임 시점이 아니라 컴파일 시점에 애노테이션을 평가한다.
+대표적인 애노테이션 프로세서로는 `Lombok`, ` QueryDSL`, `JPA` 등이 있다.
+(추가로 리플렉션을 사용하는 예시로 `@Autowired`, `@Transactional` 등이 있다.)
+어노테이션 프로세서를 사용하면 컴파일 시점에 애노테이션을 처리하여 런타임에 어노테이션을 평가하는 리플렉션보다 빠르게 동작한다.  
+
+
 애노테이션 프로세서를 만들기 위해서는 다음과 같은 과정을 거쳐야 한다.
 
-1. `AbstractProcessor` 클래스를 상속받는다.
-2. `@SupportedAnnotationTypes` 어노테이션을 사용하여 처리할 애노테이션을 지정한다.
-3. `@SupportedSourceVersion` 어노테이션을 사용하여 처리할 소스 버전을 지정한다.
-4. `process` 메서드를 오버라이딩하여 애노테이션을 처리한다.
-
 ```java
-@SupportedAnnotationTypes("com.example.MyAnnotation")
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
-public class MyAnnotationProcessor extends AbstractProcessor {
-    @Override
+@SupportedAnnotationTypes("MyAnnotation")                       // (2) 처리할 애노테이션
+@SupportedSourceVersion(SourceVersion.RELEASE_11)               // (3) 자바 버전
+public class MyAnnotationProcessor extends AbstractProcessor {  // (1) AbstractProcessor 상속
+    @Override                                                   // (4) process() 메서드 오버라이딩
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         for (TypeElement typeElement : annotations) {
             for (Element element : roundEnv.getElementsAnnotatedWith(typeElement)) {
@@ -209,12 +207,56 @@ public class MyAnnotationProcessor extends AbstractProcessor {
         }
         return true;
     }
+    
+    @Override                                                    // (5) init() 메서드 오버라이딩
+    public synchronized void init(ProcessingEnvironment processingEnv) {
+        super.init(processingEnv);
+    }
 }
 ```
 
-애노테이션 프로세서를 사용하기 위해서는 `META-INF/services/javax.annotation.processing.Processor` 파일을 만들어야 한다.
-이 파일에는 애노테이션 프로세서의 클래스 이름을 적어주면 된다.
+1. `AbstractProcessor` 클래스를 상속받는다.
 
-```java
+2. `@SupportedAnnotationTypes` 어노테이션을 사용하여 처리할 애노테이션을 지정한다. (예: `{ MyAnnotation }`
+
+3. `@SupportedSourceVersion` 어노테이션을 사용하여 자바 버전을 지정한다. (예: `SourceVersion.RELEASE_11`)
+
+4. `process()` 메서드를 오버라이딩하여 애노테이션을 처리한다.
+
+5. `init()` 메서드를 오버라이딩하여 초기화 작업을 수행한다.
+
+6. 애노테이션 프로세서를 사용하기 위해서는 `META-INF/services/javax.annotation.processing.Processor` 파일을 만들고 애노테이션 프로세서의 클래스 이름을 기록해야 한다.
+
+```bash
+# META-INF/services/javax.annotation.processing.Processor
 com.example.MyAnnotationProcessor
+```
+
+7. 마지막으로 컴파일된 애노테이션 프로세서를 jar파일에 패키징하여 사용한다.
+
+```bash
+# 컴파일된 애노테이션 프로세서를 jar파일에 패키징
+jar cvf my-annotation-processor.jar com/example/MyAnnotationProcessor.class
+```
+
+8. 또한 `jar`파일에 `META-INF/services`에 위치한 `javax.annotation.processing.Processor` 파일도 패키징해야한다.
+
+```bash
+# javax.annotation.processing.Processor 파일 패키징
+jar cvf my-annotation-processor.jar META-INF/services/javax.annotation.processing.Processor
+```
+
+9. 빌드 경로에 `MyProcessor.jar`를 두면 `javac`가 자동으로 `javax.annotation.processing.Processor`를 감지하고, `MyProcessor` 애노테이션 프로세서를
+   등록한다. 다른 경로에 둘 경우 `-processorpath` 옵션을 사용하여 애노테이션 프로세서를 등록한다.
+
+```bash
+# 빌드 경로에 있는 애노테이션 프로세서를 등록
+javac -processor MyProcessor MyClass.java
+javac MyClass.java
+```
+
+```bash
+# 다른 경로에 있는 애노테이션 프로세서를 등록
+javac -processorpath /path/to/MyProcessor.jar -processor MyProcessor MyClass.java
+javac -processorpath /path/to/MyProcessor.jar MyClass.java
 ```
