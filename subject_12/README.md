@@ -259,3 +259,6 @@ javac MyClass.java
 javac -processorpath /path/to/MyProcessor.jar -processor MyProcessor MyClass.java
 javac -processorpath /path/to/MyProcessor.jar MyClass.java
 ```
+
+> 참고자료  
+> [[Java-35] Lombok @Getter, @Setter 직접 만들어 보자](https://catch-me-java.tistory.com/49)
